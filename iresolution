@@ -1,0 +1,3 @@
+cvt "$1" "$2" | grep Modeline | sed "s/Modeline//" | xargs xrandr --newmode
+xrandr --addmode VGA-1 "$1"x"$2"_60.00
+xrandr --output VGA-1 --mode "$1"x"$2"_60.00

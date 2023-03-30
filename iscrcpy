@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+record-phone() {
+	sudo modprobe v4l2loopback
+	scrcpy --v4l2-sink=/dev/video0
+}
+
+case $1 in
+	'record-phone')
+		record-phone
+		;;
+	'help')
+		echo "Commands"
+		echo '* record-phone: Start recording android phone by USB'
+		;;
+esac

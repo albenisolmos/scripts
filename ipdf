@@ -1,0 +1,46 @@
+#!/bin/bash
+if [[ $# == 0 ]]; then
+	echo "Must indicate a operation and a file"
+	echo " * wrap - Wrap a document"
+	echo " * merge - Merge two documents"
+fi
+
+case $1 in
+	'merge')
+		if [[ $# < 3 ]]; then
+			echo -e "Error: Merge needs 2 files to merge"
+			exit 1
+		fi
+
+		[[ ! -z $4 ]] && output=$4 || output="$2"
+		output="${output%.pdf}(Merged).pdf"
+
+		gs -q -dNOPAUSE \
+			-sDEVICE=pdfwrite \
+			-sOUTPUTFILE="$output" \
+			-dBATCH "$2" "$3" && exit_code=$?
+
+		if [[ $exit_code == 0 ]]; then
+			exit 0
+		else
+			exit 1
+		fi
+		;;
+	'wrap')
+		[[ -z $3 ]] && output="$2" || output="$3"
+		output="${output%.pdf}(Wrapped).pdf"
+
+		gs -sDEVICE=pdfwrite \
+			-dCompatibilityLevel=1.4 \
+			-dPDFSETTINGS=/ebook \
+			-dNOPAUSE -dQUIET -dBATCH \
+			-sOutputFile="${output}" \
+			"$2" && exit_code=$?
+
+		if [[ $exit_code == 0 ]]; then
+			exit 0
+		else
+			exit 1
+		fi
+		;;
+esac

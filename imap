@@ -1,0 +1,50 @@
+#!/usr/bin/bash
+
+rest()
+{
+	if [ "$2" = "--lazy" ]; then
+		sleep 2
+	fi
+}
+
+set_qwerty()
+{
+	setxkbmap es
+	setxkbmap -option shift:both_capslock
+	xmodmap ~/.config/qwerty.xmodmap
+	xcape -e 'Mode_switch=Escape'
+	xset r rate 200 25
+	tmux source ~/.tmux.conf
+}
+
+set_colemak()
+{
+	setxkbmap colemak,es -option shift:both_capslock
+	xmodmap ~/.config/colemak.xmodmap
+	xcape -e 'Mode_switch=Escape'
+	xset r rate 200 25
+	tmux source ~/.tmux.conf \; source ~/.config/tmux-colemak.conf
+}
+
+if [[ $# == 0 ]]; then
+	echo "Options"
+	echo "1. qwerty"
+	echo "2. colemak"
+	exit 0
+fi
+
+case $1 in
+	info)
+		setxkbmap -print -verbose 10;;
+	1|qwerty)
+		set_qwerty;;
+	2|colemak)
+		set_colemak;;
+	xset)
+		xset r rate 200 25;;
+	*)
+		echo 'Invalid option.'
+		exit 1
+esac
+
+exit 0

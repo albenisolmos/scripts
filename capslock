@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+setxkbmap -option shift:both_capslock
+xmodmap ~/.xmodmap
+xcape -e 'Mode_switch=Escape'
